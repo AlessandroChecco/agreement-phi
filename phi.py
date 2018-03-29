@@ -29,7 +29,6 @@ def minimal_matrix(v, fillval=np.nan):
     mask = lens[:,None] > np.arange(lens.max())
     out = np.full(mask.shape,fillval)
     out[mask] = np.concatenate(v)
-    print(out)
     return out
 
 def agreement(precision):
