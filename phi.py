@@ -6,9 +6,11 @@ from pymc3 import Model, Normal, Beta, HalfNormal, Uniform, find_MAP, Slice, Exp
 import pymc3 as pm
 import scipy.stats as stats
 from time import time
+import pandas as pd
 
 # TODO
 # Check degerate cases when using only one document
+# see this https://discourse.pymc.io/t/nan-occurred-in-optimization-with-nuts/39/7
 
 def scale_mat( mat, limits):   
     result = []
@@ -20,6 +22,15 @@ def scale_mat( mat, limits):
         temp = (temp * (l-1)+0.5)/l
         result.append(list(temp))
     return np.array(result,ndmin=2)
+    
+def minimal_matrix(v, fillval=np.nan):
+    v = [doc[~np.isnan(doc)].tolist() for doc in v]
+    lens = np.array([len(item) for item in v])
+    mask = lens[:,None] > np.arange(lens.max())
+    out = np.full(mask.shape,fillval)
+    out[mask] = np.concatenate(v)
+    print(out)
+    return out
 
 def agreement(precision):
     return 1-2 * np.exp(-np.log(2)*precision/2)
@@ -30,7 +41,7 @@ def run_phi( data, **kwargs):
     #assert False, "Stop"
 
 
-    print("Computing Phi")
+
     
     data = np.array(data)
     
@@ -38,12 +49,22 @@ def run_phi( data, **kwargs):
     if kwargs.get( "limits" ) is not None: 
         limits = kwargs.get( "limits" )
     else:  
-        limits = (np.min(list(itertools.chain.from_iterable(data))),np.max(list(itertools.chain.from_iterable(data))) )
+        limits = (np.nanmin(list(itertools.chain.from_iterable(data))),np.nanmax(list(itertools.chain.from_iterable(data))) )
     
     if kwargs.get("verbose") is not None:
         verbose = kwargs.get("verbose")
     else:
         verbose = False
+        
+    if kwargs.get("table") is not None:
+        table = kwargs.get("table")
+    else:
+        table = False
+
+    if kwargs.get("keep_missing") is not None:
+        keep_missing = kwargs.get("keep_missing")
+    else:
+        keep_missing = True
         
     if kwargs.get("njobs") is not None:
         njobs = kwargs.get("njobs")
@@ -60,7 +81,8 @@ def run_phi( data, **kwargs):
         gt = kwargs.get( "gt" )
     else:  
         gt = [None] * len(data)
-    
+
+    if verbose: print("Computing Phi")
     idx_of_gt = np.array([x is not None for x in gt])
     idx_of_not_gt = np.array([x is None for x in gt])
     num_of_gt = np.sum(idx_of_gt)
@@ -74,9 +96,24 @@ def run_phi( data, **kwargs):
     
     num_of_docs = len(data) # number of documents
     
+    rectangular = True
+    sparse = False
+    if np.isnan(data).any():
+        sparse = True
+        data =  np.ma.masked_invalid(data)
+        data = minimal_matrix(data)
+    
     scaled = scale_mat( data, limits)
+    
+    if (sparse and not keep_missing):
+        rectangular = False
+        scaled = [doc[~np.isnan(doc)].tolist() for doc in scaled] #make data a list of lists
 
-    NUM_OF_INTERACTIONS = 1000
+
+
+
+    NUM_OF_ITERATIONS = 1000
+    seed = 123
         
     with basic_model:
         precision = Normal('precision',mu=2,sd=sd)
@@ -89,34 +126,57 @@ def run_phi( data, **kwargs):
         alpha = mu * precision
         beta = precision*(1-mu)
         
-        if num_of_docs-num_of_gt == 1:
-            Beta('beta_obs',observed=scaled[idx_of_not_gt],alpha=alpha,beta=beta)
+        if rectangular:
+            masked = pd.DataFrame(scaled[idx_of_not_gt]) #needed to keep nan working
+            if num_of_docs-num_of_gt == 1:
+                Beta('beta_obs',observed=masked,alpha=alpha,beta=beta)
+            else:
+                Beta('beta_obs',observed=masked.T,alpha=alpha,beta=beta,shape=num_of_docs-num_of_gt)
         else:
-            Beta('beta_obs',observed=scaled[idx_of_not_gt].T,alpha=alpha,beta=beta,shape=num_of_docs-num_of_gt)#alpha=a,beta=b,observed=beta)
-#        Beta('beta_obs',observed=scaled,alpha=alpha,beta=beta,shape=num_of_docs)#alpha=a,beta=b,observed=beta)
+            for i,doc in enumerate(scaled):
+                Beta('beta_obs'+str(i),observed=doc,alpha=alpha[i],beta=beta[i])
+
 
         for i,g in enumerate(gt):
             if g is not None:
                 mu = Normal('mu'+str(i),mu=gt[i],sd=1)
                 alpha = mu * precision
                 beta = precision*(1-mu)
-                Beta('beta_obs'+str(i),observed=scaled[i],alpha=alpha,beta=beta)#alpha=a,beta=b,observed=beta)
+                Beta('beta_obs_g'+str(i),observed=scaled[i],alpha=alpha,beta=beta)#alpha=a,beta=b,observed=beta)
     
-        # Staistical inference
-        start = find_MAP()
-        bef_slice = time()
-        step = Metropolis()
-        aft_slice = time()
-        bef_trace = time()
-        #trace = sample(NUM_OF_INTERACTIONS, step=step, progressbar=True, start=start,radom_seed=123)
-        trace = sample(NUM_OF_INTERACTIONS, progressbar=verbose,random_seed=123, njobs=njobs,start=start,step=step)
-        pm.summary(trace,include_transformed=True)
-        res = pm.stats.df_summary(trace,include_transformed=True)
-        
-        res.drop(["sd","mc_error"], axis=1, inplace = True)
-        res = res.transpose()
-        res["agreement"] = agreement(res['precision']) 
-
+    
+    
+    
+        try:
+            stds = np.ones(basic_model.ndim)
+            for _ in range(5):
+                args = {'scaling': stds ** 2, 'is_cov': True}
+                trace = pm.sample(100, tune=100, init=None, nuts_kwargs=args,chains=100,progressbar=verbose,random_seed=seed)
+                samples = [basic_model.dict_to_array(p) for p in trace]
+                stds = np.array(samples).std(axis=0)
+    
+            step = pm.NUTS(scaling=stds ** 2, is_cov=True, target_accept=0.9)
+            start = trace[0]
+            trace = sample(NUM_OF_ITERATIONS, tune=round(NUM_OF_ITERATIONS/2), njobs=njobs,chains=8, init=None, step=step, start=start,progressbar=verbose,random_seed=seed)    
+            # Staistical inference
+            beg = time()
+            #start = find_MAP()
+            bef_slice = time()
+            #step = NUTS()# Metropolis()
+            #step = Metropolis()
+            aft_slice = time()
+            bef_trace = time()
+            #trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=123, njobs=njobs,start=start,step=step)
+    #        trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=123, njobs=njobs,init=None,tune=100)    
+            pm.summary(trace,include_transformed=True)
+            res = pm.stats.df_summary(trace,include_transformed=True)
+            res.drop(["sd","mc_error"], axis=1, inplace = True)
+            res = res.transpose()
+            res["agreement"] = agreement(res['precision']) 
+        except:
+            step = Metropolis()
+            start = find_MAP()
+            trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=seed, njobs=njobs,start=start,step=step)
 
         # ---- 
         
@@ -131,22 +191,26 @@ def run_phi( data, **kwargs):
         res.drop("agreement", inplace = True, axis = 1)
         res.drop("precision", inplace = True, axis = 1)
 
-        col_names = res.columns
+        if table:
+            col_names = res.columns[0:len(data)-1]
+            for i, name in enumerate(col_names):
+                l = len(scaled[i])
+                for j in range(3):
 
-        for i, name in enumerate(col_names):
-            l = len(scaled[i])
-            for j in range(3):
-
-                b = res[name].iloc[j]
-                mu_res =  ( b * l - 0.5) / ( l - 1 )
-                res[name].iloc[j] =  np.clip( mu_res , 0, 1)
+                    b = res[name].iloc[j]
+                    mu_res =  ( b * l - 0.5) / ( l - 1 )
+                    res[name].iloc[j] =  np.clip( mu_res , 0, 1)
 
 
-        res["agreement"] = col_agreement
-        res.insert(0, "precision", col_precision)
+            res["agreement"] = col_agreement
+            res.insert(0, "precision", col_precision)
 
 
         
         aft_trace = time()
-    return res
+    if verbose: print("Elapsed time for computation: ",time()-beg)
+    if table:
+        return res
+    else:
+        return {'agreement':col_agreement['mean'],'interval': col_agreement[['hpd_2.5','hpd_97.5']].as_matrix()}
 
