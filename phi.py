@@ -218,11 +218,8 @@ def run_phi( data, **kwargs):
                     res[name].iloc[j] =  np.clip( mu_res , 0, 1)*(limits[1]-limits[0])
 
 
-            res["agreement"] = col_agreement
-            res.insert(0, "precision", col_precision)
-
-
-        
+        res["agreement"] = col_agreement
+        res.insert(0, "precision", col_precision)
         aft_trace = time()
     computation_time = time()-beg
     if verbose: print("Elapsed time for computation: ",computation_time)
