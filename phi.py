@@ -83,7 +83,7 @@ def run_phi( data, **kwargs):
     if kwargs.get("njobs") is not None:
         njobs = kwargs.get("njobs")
     else:
-        njobs = 1
+        njobs = 2
         
     if kwargs.get("sd") is not None:
         sd = kwargs.get("sd")
@@ -187,8 +187,8 @@ def run_phi( data, **kwargs):
         except:
             beg = time()
             step = Metropolis()
-            start = find_MAP()
-            trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=seed, njobs=njobs,start=start,step=step)
+            #start = find_MAP()
+            trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=seed, njobs=njobs,step=step)#,start=start)
         pm.summary(trace,include_transformed=True)
         res = pm.stats.df_summary(trace,include_transformed=True)
         res.drop(["sd","mc_error"], axis=1, inplace = True)
