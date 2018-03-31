@@ -187,7 +187,7 @@ def run_phi( data, **kwargs):
         except:
             beg = time()
             step = Metropolis()
-            #start = find_MAP()
+            #start = find_MAP(disp=False)
             trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=seed, njobs=njobs,step=step)#,start=start)
         pm.summary(trace,include_transformed=True)
         res = pm.stats.df_summary(trace,include_transformed=True)
