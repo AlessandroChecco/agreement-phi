@@ -55,15 +55,30 @@ def run_phi( data, **kwargs):
     else:
         verbose = False
         
+    if kwargs.get("seed") is not None:
+        seed = kwargs.get("seed")
+    else:
+        seed = 123
+        
     if kwargs.get("table") is not None:
         table = kwargs.get("table")
     else:
         table = False
+        
+    if kwargs.get("N") is not None:
+        N = kwargs.get("N")
+    else:
+        N = 1000
 
     if kwargs.get("keep_missing") is not None:
         keep_missing = kwargs.get("keep_missing")
     else:
         keep_missing = True
+        
+    if kwargs.get("fast") is not None:
+        fast = kwargs.get("fast")
+    else:
+        fast = True
         
     if kwargs.get("njobs") is not None:
         njobs = kwargs.get("njobs")
@@ -111,8 +126,8 @@ def run_phi( data, **kwargs):
 
 
 
-    NUM_OF_ITERATIONS = 1000
-    seed = 123
+    NUM_OF_ITERATIONS = N
+
         
     with basic_model:
         precision = Normal('precision',mu=2,sd=sd)
@@ -147,10 +162,12 @@ def run_phi( data, **kwargs):
     
     
         try:
+            if fast:
+                assert False
             stds = np.ones(basic_model.ndim)
             for _ in range(5):
                 args = {'scaling': stds ** 2, 'is_cov': True}
-                trace = pm.sample(100, tune=100, init=None, nuts_kwargs=args,chains=100,progressbar=verbose,random_seed=seed)
+                trace = pm.sample(round(NUM_OF_ITERATIONS/10), tune=round(NUM_OF_ITERATIONS/10), init=None, nuts_kwargs=args,chains=10,progressbar=verbose,random_seed=seed)
                 samples = [basic_model.dict_to_array(p) for p in trace]
                 stds = np.array(samples).std(axis=0)
     
@@ -166,17 +183,17 @@ def run_phi( data, **kwargs):
             aft_slice = time()
             bef_trace = time()
             #trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=123, njobs=njobs,start=start,step=step)
-    #        trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=123, njobs=njobs,init=None,tune=100)    
-            pm.summary(trace,include_transformed=True)
-            res = pm.stats.df_summary(trace,include_transformed=True)
-            res.drop(["sd","mc_error"], axis=1, inplace = True)
-            res = res.transpose()
-            res["agreement"] = agreement(res['precision']) 
+    #        trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=123, njobs=njobs,init=None,tune=100)     
         except:
+            beg = time()
             step = Metropolis()
             start = find_MAP()
             trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=seed, njobs=njobs,start=start,step=step)
-
+        pm.summary(trace,include_transformed=True)
+        res = pm.stats.df_summary(trace,include_transformed=True)
+        res.drop(["sd","mc_error"], axis=1, inplace = True)
+        res = res.transpose()
+        res["agreement"] = agreement(res['precision'])
         # ---- 
         
         #sub_res = res.copy()
@@ -198,7 +215,7 @@ def run_phi( data, **kwargs):
 
                     b = res[name].iloc[j]
                     mu_res =  ( b * l - 0.5) / ( l - 1 )
-                    res[name].iloc[j] =  np.clip( mu_res , 0, 1)
+                    res[name].iloc[j] =  np.clip( mu_res , 0, 1)*(limits[1]-limits[0])
 
 
             res["agreement"] = col_agreement
@@ -207,9 +224,15 @@ def run_phi( data, **kwargs):
 
         
         aft_trace = time()
-    if verbose: print("Elapsed time for computation: ",time()-beg)
+    computation_time = time()-beg
+    if verbose: print("Elapsed time for computation: ",computation_time)
+    
+    convergence = True
+    if np.isnan(res.loc['Rhat']['precision']) or np.abs(res.loc['Rhat']['precision'] - 1) > 1e-1:
+        print("Warning! You need more iterations!")
+        convergence = False
     if table:
         return res
     else:
-        return {'agreement':col_agreement['mean'],'interval': col_agreement[['hpd_2.5','hpd_97.5']].as_matrix()}
+        return {'agreement':col_agreement['mean'],'interval': col_agreement[['hpd_2.5','hpd_97.5']].as_matrix(),"computation_time":computation_time,"convergence_test":convergence}
 
