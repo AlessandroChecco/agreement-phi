@@ -20,7 +20,7 @@ input example: ``m_random = np.random.randint(5, size=(5, 10)).tolist(); m_rando
 - njobs = 4 number of parallel jobs
 
 output example:
-``{'agreement': 0.023088447111559884, 'computation_time': 58.108173847198486, 'convergence_test': True, 'interval': array([-0.03132854,  0.06889001])}``
+``{'agreement': 0.023088447111559884, 'computation_time': 58.108173847198486, 'convergence_test': True, '95% Highest Posterior Density interval': array([-0.03132854,  0.06889001])}``
 
 If  convergence_test is False we recommend to increase N.
 
