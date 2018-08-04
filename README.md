@@ -31,9 +31,10 @@ Note that the code will try to infer the limits of the scale, but it's highly su
 
 ### output example
 ```
-{'agreement': 0.023088447111559884, 'computation_time': 58.108173847198486, 'convergence_test': True, '95% Highest Posterior Density interval': array([-0.03132854,  0.06889001])}
+{'agreement': 0.023088447111559884, 'computation_time': 58.108173847198486, 'convergence_test': True, 'interval': array([-0.03132854,  0.06889001])}
 ```
 
+Where 'interval' represents the 95% Highest Posterior Density interval.
 If  convergence_test is False we recommend to increase N.
 
 ## References
