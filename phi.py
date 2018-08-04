@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns, numpy as np
 import itertools
-from alpha import krippendorff_alpha, interval_metric, nominal_metric
 from pymc3 import Model, Normal, Beta, HalfNormal, Uniform, find_MAP, Slice, Exponential, Constant, sample, math, Gamma, NUTS, HamiltonianMC, Metropolis
 import pymc3 as pm
 import scipy.stats as stats
