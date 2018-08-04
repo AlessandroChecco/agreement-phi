@@ -1,5 +1,5 @@
 # Agreement measure Phi
-Source code for inter-rater agreement measure Phi.
+Source code for inter-rater agreement measure Phi. Live demo here: http://agreement-measure.sheffield.ac.uk
 
 ## Requirements
 python 3+, pymc3 version 3.3. See requirements files for tested working versions on linux and osx.
