@@ -5,7 +5,7 @@ Source code for inter-rater agreement measure Phi.
 python 3+, pymc3 version 3.3. See requirements files for tested working versions on linux and osx.
 
 ## Example
-Input is a matrix with NaN for missing values, every row is a different document.
+Input is a matrix with NaN for missing values, every row represents a different document, every column a different worker. Note that Phi does not take in account worker bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
 
 ``run_phi( data_phi,limits=[0,100],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)``
 
