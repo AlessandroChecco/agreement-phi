@@ -1,4 +1,4 @@
-# agreement-phi
+# Agreement measure Phi
 Source code for inter-rater agreement measure Phi.
 
 ## Requirements
@@ -21,3 +21,15 @@ output example:
 ``{'agreement': 0.023088447111559884, 'computation_time': 58.108173847198486, 'convergence_test': True, 'interval': array([-0.03132854,  0.06889001])}``
 
 If  convergence_test is False we recommend to increase N.
+
+## References
+If you use it for academic publications, please cite out paper
+Checco, A., Roitero, K., Maddalena, E., Mizzaro, S., & Demartini, G. (2017). Let’s agree to disagree: Fixing agreement measures for crowdsourcing.
+```
+@article{checco2017let,
+  title={Let’s agree to disagree: Fixing agreement measures for crowdsourcing},
+  author={Checco, Alessandro and Roitero, Kevin and Maddalena, Eddy and Mizzaro, Stefano and Demartini, Gianluca},
+  year={2017},
+  publisher={AAAI Press}
+}
+```
