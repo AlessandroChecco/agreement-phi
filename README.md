@@ -2,7 +2,7 @@
 Source code for inter-rater agreement measure Phi.
 
 ## Requirements
-pymc3 version 3.3
+python 3+, pymc3 version 3.3. See requirements files for tested working versions on linux and osx.
 
 ## Example
 Input is a matrix with NaN for missing values, every row is a different document.
