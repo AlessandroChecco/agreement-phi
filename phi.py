@@ -1,5 +1,4 @@
-import matplotlib.pyplot as plt
-import seaborn as sns, numpy as np
+import numpy as np
 import itertools
 from pymc3 import Model, Normal, Beta, HalfNormal, Uniform, find_MAP, Slice, Exponential, Constant, sample, math, Gamma, NUTS, HamiltonianMC, Metropolis
 import pymc3 as pm
@@ -230,5 +229,5 @@ def run_phi( data, **kwargs):
     if table:
         return res
     else:
-        return {'agreement':col_agreement['mean'],'interval': col_agreement[['hpd_2.5','hpd_97.5']].as_matrix(),"computation_time":computation_time,"convergence_test":convergence}
+        return {'agreement':col_agreement['mean'],'95% Highest Posterior Density interval': col_agreement[['hpd_2.5','hpd_97.5']].as_matrix(),"computation_time":computation_time,"convergence_test":convergence}
 
