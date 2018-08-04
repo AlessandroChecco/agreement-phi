@@ -5,7 +5,9 @@ Source code for inter-rater agreement measure Phi.
 python 3+, pymc3 version 3.3. See requirements files for tested working versions on linux and osx.
 
 ## Example
-Input is a np 2-dimensional array with NaN for missing values, every row represents a different document, every column a different worker. Note that Phi does not take in account worker bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
+Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists. Every row represents a different document, every column a different rating. Note that Phi does not take in account worker bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
+
+input example: ``m_random = np.random.randint(5, size=(5, 10)).tolist(); m_random[0][1]=np.nan``, or equivalently ``m_random = np.random.randint(5, size=(5, 10)).astype(float);m_random[0][1]=np.nan``. Note that the code will try to infer the limits of the scale, but it's highly suggested to include them (in case some elements on the boundary are missing). For this example the parameter limits would be ``limits=[0,4]``.
 
 ``run_phi( data_phi,limits=[0,100],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)``
 
