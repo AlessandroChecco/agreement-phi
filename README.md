@@ -37,13 +37,15 @@ Note that the code will try to infer the limits of the scale, but it's highly su
 If  convergence_test is False we recommend to increase N.
 
 ## References
-If you use it for academic publications, please cite out paper
-Checco, A., Roitero, K., Maddalena, E., Mizzaro, S., & Demartini, G. (2017). Let’s agree to disagree: Fixing agreement measures for crowdsourcing.
+If you use it for academic publications, please cite out paper:
+Checco, A., Roitero, A., Maddalena, E., Mizzaro, S., & Demartini, G. (2017). Let’s Agree to Disagree: Fixing Agreement Measures for Crowdsourcing. In Proceedings of the Fifth AAAI Conference on Human Computation and Crowdsourcing (HCOMP-17) (pp. 11-20). AAAI Press.
 ```
-@article{checco2017let,
-  title={Let’s agree to disagree: Fixing agreement measures for crowdsourcing},
-  author={Checco, Alessandro and Roitero, Kevin and Maddalena, Eddy and Mizzaro, Stefano and Demartini, Gianluca},
+@inproceedings{checco2017let,
+  title={Let’s Agree to Disagree: Fixing Agreement Measures for Crowdsourcing},
+  author={Checco, A and Roitero, A and Maddalena, E and Mizzaro, S and Demartini, G},
+  booktitle={Proceedings of the Fifth AAAI Conference on Human Computation and Crowdsourcing (HCOMP-17)},
+  pages={11--20},
   year={2017},
-  publisher={AAAI Press}
+  organization={AAAI Press}
 }
 ```
