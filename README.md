@@ -5,7 +5,7 @@ Source code for inter-rater agreement measure Phi. Live demo here: http://agreem
 python 3+, pymc3 version 3.3. See requirements files for tested working versions on linux and osx.
 
 ## Example
-Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists. Every row represents a different document, every column a different rating. Note that Phi does not take in account worker bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
+Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists (where each list is a set of ratings for a document, with arbitrary length). Every row represents a different document, every column a different rating. Note that Phi does not take in account worker bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
 
 ### Input example 
 ```
