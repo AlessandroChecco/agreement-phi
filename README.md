@@ -18,19 +18,19 @@ m_random = np.random.randint(5, size=(5, 10)).astype(float)
 m_random[0][1]=np.nan
 ```
 ### Running the measure inference
-``run_phi(m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)``
+``run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)``
 
-- m_random [non optional] is the matrix or list of lists of input.
+- ``data`` [non optional] is the matrix or list of lists of input.
 
 #### OPTIONAL PARAMETERS:
 
-- limits defines the scale [automatically inferred by default]. It's a list with the minimum and maximum (included) of the scale.
-- keep_missing [automatically inferred by default based on number of NaNs] boolean. If you have many NaNs you might want to switch to False,
-- fast [default True] boolean. Whether to use or not the fast inferential technique.
-- N [default 1000] integer. Number of iterations. Increase it if ``convergence_test`` is False.
-- verbose [default False] boolean. If True it shows more information
-- table [default False] boolean. If True more verbose output in form of a table.
-- njobs [default 1] integer. Number of parallel jobs. Set it equal to the number of CPUs available.
+- ``limits`` defines the scale [automatically inferred by default]. It's a list with the minimum and maximum (included) of the scale.
+- ``keep_missing`` [automatically inferred by default based on number of NaNs] boolean. If you have many NaNs you might want to switch to False,
+- ``fast`` [default True] boolean. Whether to use or not the fast inferential technique.
+- ``N`` [default 1000] integer. Number of iterations. Increase it if ``convergence_test`` is False.
+- ``verbose`` [default False] boolean. If True it shows more information
+- ``table`` [default False] boolean. If True more verbose output in form of a table.
+- ``njobs`` [default 1] integer. Number of parallel jobs. Set it equal to the number of CPUs available.
 
 Note that the code will try to infer the limits of the scale, but it's highly suggested to include them (in case some elements on the boundary are missing). For this example the parameter limits would be ``limits=[0,4]``.
 
