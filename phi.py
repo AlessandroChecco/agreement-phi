@@ -33,13 +33,6 @@ def agreement(precision):
     return 1-2 * np.exp(-np.log(2)*precision/2)
 
 def run_phi( data, **kwargs):
-    from IPython.display import display, HTML
-    
-    #assert False, "Stop"
-
-
-
-    
     data = np.array(data)
     
     # Check limits in **kwargs
@@ -71,7 +64,8 @@ def run_phi( data, **kwargs):
     if kwargs.get("keep_missing") is not None:
         keep_missing = kwargs.get("keep_missing")
     else:
-        keep_missing = True
+        keep_missing = None #AUTO
+        #keep_missing = True 
         
     if kwargs.get("fast") is not None:
         fast = kwargs.get("fast")
@@ -115,7 +109,12 @@ def run_phi( data, **kwargs):
         data =  np.ma.masked_invalid(data)
         data = minimal_matrix(data)
     
-    scaled = scale_mat( data, limits)
+    scaled = scale_mat(data, limits)
+    
+    if (np.count_nonzero(np.isnan(scaled))/scaled.size) > 0.2: # a lot of nans
+        if verbose: print("WARNING: a lot of missing values: we are going to set keep_missing=False to improve convergence (if not manually overridden)")
+        if keep_missing is None:
+            keep_missing=False
     
     if (sparse and not keep_missing):
         rectangular = False
@@ -227,7 +226,27 @@ def run_phi( data, **kwargs):
         print("Warning! You need more iterations!")
         convergence = False
     if table:
-        return res
+        return {'agreement':col_agreement['mean'],'interval': col_agreement[['hpd_2.5','hpd_97.5']].as_matrix(),"computation_time":computation_time,"convergence_test":convergence,'table':res}
     else:
         return {'agreement':col_agreement['mean'],'interval': col_agreement[['hpd_2.5','hpd_97.5']].as_matrix(),"computation_time":computation_time,"convergence_test":convergence}
 
+
+if __name__ == "__main__":
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser(description="Phi Agreement Measure")
+
+    parser.add_argument("-f", "--file", dest="filename",
+                        help="input FILE", metavar="FILE",required=True)
+    parser.add_argument("-v", "--verbose",
+                        action="store_true", dest="verbose",
+                        default=False,
+                        help="don't print verbose messages")
+    args = parser.parse_args()
+    df = pd.read_csv(args.filename)
+    if not df.applymap(lambda x: isinstance(x, (int, float))).all(1).all(0):
+        raise ValueError('ERROR: csv is non numeric!')
+
+    as_mat =  df.as_matrix()
+    result = run_phi( as_mat)
+    print(result)
