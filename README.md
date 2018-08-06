@@ -9,6 +9,7 @@ Input is a numpy 2-dimensional array with NaN for missing values, or equivalentl
 
 ### Input example 
 ```
+import numpy as np
 m_random = np.random.randint(5, size=(5, 10)).tolist()
 m_random[0][1]=np.nan
 ```
@@ -18,7 +19,10 @@ m_random = np.random.randint(5, size=(5, 10)).astype(float)
 m_random[0][1]=np.nan
 ```
 ### Running the measure inference
-``run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)``
+```
+import phi
+phi.run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)
+```
 
 - ``data`` [non optional] is the matrix or list of lists of input.
 
