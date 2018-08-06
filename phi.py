@@ -1,5 +1,6 @@
 import numpy as np
 import itertools
+import pymc3
 from pymc3 import Model, Normal, Beta, HalfNormal, Uniform, find_MAP, Slice, Exponential, Constant, sample, math, Gamma, NUTS, HamiltonianMC, Metropolis
 import pymc3 as pm
 import scipy.stats as stats
@@ -186,8 +187,11 @@ def run_phi( data, **kwargs):
             step = Metropolis()
             #start = find_MAP()
             trace = sample(NUM_OF_ITERATIONS, progressbar=verbose,random_seed=seed, njobs=njobs,step=step)#,start=start)
-        pm.summary(trace,include_transformed=True)
-        res = pm.stats.df_summary(trace,include_transformed=True)
+        #pm.summary(trace,include_transformed=True)
+        if np.float(pymc3.__version__) <= 3.3:
+            res = pm.stats.df_summary(trace,include_transformed=True)
+        else:
+            res = pm.summary(trace,include_transformed=True)
         res.drop(["sd","mc_error"], axis=1, inplace = True)
         res = res.transpose()
         res["agreement"] = agreement(res['precision'])
