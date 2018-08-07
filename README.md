@@ -34,6 +34,7 @@ or equivalently
 m_random = np.random.randint(5, size=(5, 10)).astype(float)
 m_random[0][1]=np.nan
 ```
+
 ### Running the measure inference
 ```
 from agreement_phi import run_phi
