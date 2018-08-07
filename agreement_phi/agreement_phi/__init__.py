@@ -12,10 +12,10 @@ import ast
 # Agreement Phi, see https://github.com/AlessandroChecco/agreement-phi
 # Version 0.1.4
 
-def scale_mat( mat, limits):   
+def scale_mat( mat, limits,binning_multiplier=1):   
     result = []
     for i,value in enumerate(mat):
-        l = len(value)
+        l = len(value) * binning_multiplier
         array = np.array(value)
         temp =  array - limits[0]
         temp = temp/(limits[1]-limits[0])
@@ -49,7 +49,13 @@ def run_phi(data, **kwargs):
         verbose = kwargs.get("verbose")
     else:
         verbose = False
-        
+
+    if (kwargs.get("binning") is not None) and not kwargs.get("binning"):
+        print("removing binning on borders")
+        binning_multiplier = 100000
+    else:
+        binning_multiplier = 1
+    
     if kwargs.get("seed") is not None:
         seed = kwargs.get("seed")
     else:
@@ -102,7 +108,7 @@ def run_phi(data, **kwargs):
         
     for i,g in enumerate(gt):
         if g is not None:      
-            gt[i] = scale_mat( np.array( [[gt[i]]* len(data[i])]), limits) [0][0]
+            gt[i] = scale_mat( np.array( [[gt[i]]* len(data[i])]), limits,binning_multiplier=binning_multiplier) [0][0]
     
     num_of_docs = len(data) # number of documents
     
@@ -113,7 +119,7 @@ def run_phi(data, **kwargs):
         data =  np.ma.masked_invalid(data)
         data = minimal_matrix(data)
     
-    scaled = scale_mat(data, limits)
+    scaled = scale_mat(data, limits, binning_multiplier=binning_multiplier)
     
     if (np.count_nonzero(np.isnan(scaled))/scaled.size) > 0.2: # a lot of nans
         if verbose: print("WARNING: a lot of missing values: we are going to set keep_missing=False to improve convergence (if not manually overridden)")
@@ -214,7 +220,7 @@ def run_phi(data, **kwargs):
         if table:
             col_names = res.columns[0:len(data)-1]
             for i, name in enumerate(col_names):
-                l = len(scaled[i])
+                l = len(scaled[i]) * binning_multiplier
                 for j in range(3):
 
                     b = res[name].iloc[j]

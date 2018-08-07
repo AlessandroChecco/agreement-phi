@@ -33,7 +33,7 @@ optional arguments:
 ```
 
 ## Example - from python
-Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists (where each list is a set of ratings for a document, with arbitrary length). Every row represents a different document, every column a different rating. Note that Phi does not take in account rater bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
+Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists (where each list is a set of ratings for a document, of the same length with nan padding as needed). Every row represents a different document, every column a different rating. Note that Phi does not take in account rater bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
 
 ### Input example 
 ```
@@ -53,7 +53,7 @@ from agreement_phi import run_phi
 run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)
 ```
 
-- ``data`` [non optional] is the matrix or list of lists of input.
+- ``data`` [non optional] is the matrix or list of lists of input (all lists of the same length with nan padding if needed).
 
 #### OPTIONAL PARAMETERS:
 
@@ -64,6 +64,7 @@ run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=F
 - ``verbose`` [default False] boolean. If True it shows more information
 - ``table`` [default False] boolean. If True more verbose output in form of a table.
 - ``njobs`` [default 1] integer. Number of parallel jobs. Set it equal to the number of CPUs available.
+- ``binning`` [default True] boolean. If False consider the values in the boundary of scale non binned: this is useful when using a discrete scale and the value in the boundaries should be considered adhering to the limits and not in the center of the corresponding bin. This is useful when the value of the boundaries have a strong meaning (for example [absolutely not, a bit, medium, totally]) where answering in the boundary of the scale is not in a bin as close as the second step in the scale.
 
 Note that the code will try to infer the limits of the scale, but it's highly suggested to include them (in case some elements on the boundary are missing). For the example shown above the parameter limits would be ``limits=[0,4]``.
 
