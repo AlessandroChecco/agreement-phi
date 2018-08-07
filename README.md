@@ -4,7 +4,23 @@ Source code for inter-rater agreement measure Phi. Live demo here: http://agreem
 ## Requirements
 python 3+, pymc3 3.3+. See requirements files for tested working versions on linux and osx.
 
-## Example
+## Installation - with pip
+Simply run ``pip install agreement_phi``.
+This will provide a module and a command line executable
+
+## Installation - without pip
+Download the folder.
+
+## Example - from command line
+Prepare a csv file (no header, each row is a document, each column a rater), leaving empty the missing values. For example ``input.csv``:
+```
+1,2,,3
+1,1,2,
+4,3,2,1
+``` 
+And execute from the console ``run_phi -f input.csv``.
+
+## Example - from python
 Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists (where each list is a set of ratings for a document, with arbitrary length). Every row represents a different document, every column a different rating. Note that Phi does not take in account rater bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
 
 ### Input example 
@@ -20,8 +36,8 @@ m_random[0][1]=np.nan
 ```
 ### Running the measure inference
 ```
-import phi
-phi.run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)
+from agreement_phi import run_phi
+run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)
 ```
 
 - ``data`` [non optional] is the matrix or list of lists of input.
