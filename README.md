@@ -30,7 +30,7 @@ optional arguments:
   -f FILE, --file FILE           input FILE <REQUIRED>
   -v, --verbose                  print verbose messages
   -l val val, --limits val val   Set limits <RECOMMENDED> (two values separated by a space)
-```_
+```
 
 ## Example - from python
 Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists (where each list is a set of ratings for a document, with arbitrary length). Every row represents a different document, every column a different rating. Note that Phi does not take in account rater bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
