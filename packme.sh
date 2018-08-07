@@ -5,4 +5,8 @@ rm -rf ./build
 rm -rf ./agreement_phi.egg-info
 python3 setup.py sdist bdist_wheel
 twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-#pip install --index-url https://test.pypi.org/simple/ agreement-phi
+rm -rf ./dist
+rm -rf ./build
+rm -rf ./agreement_phi.egg-info
+echo "You can install with:"
+echo "pip install --index-url https://test.pypi.org/simple/ agreement-phi"
