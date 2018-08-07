@@ -5,7 +5,7 @@ Source code for inter-rater agreement measure Phi. Live demo here: http://agreem
 python 3+, pymc3 3.3+. See requirements files for tested working versions on linux and osx.
 
 ## Example
-Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists (where each list is a set of ratings for a document, with arbitrary length). Every row represents a different document, every column a different rating. Note that Phi does not take in account rater bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
+Input is the path of a csv file (string) or a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists (where each list is a set of ratings for a document, with arbitrary length). Every row represents a different document, every column a different rating. Note that Phi does not take in account rater bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
 
 ### Input example 
 ```
@@ -18,13 +18,14 @@ or equivalently
 m_random = np.random.randint(5, size=(5, 10)).astype(float)
 m_random[0][1]=np.nan
 ```
+
 ### Running the measure inference
 ```
 import phi
 phi.run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=False,table=False,N=500)
 ```
 
-- ``data`` [non optional] is the matrix or list of lists of input.
+- ``data`` [non optional] is the matrix or list of lists of input, or a string indicating the path to a csv file.
 
 #### OPTIONAL PARAMETERS:
 

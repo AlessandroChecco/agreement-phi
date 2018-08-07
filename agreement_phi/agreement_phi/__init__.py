@@ -33,7 +33,9 @@ def minimal_matrix(v, fillval=np.nan):
 def agreement(precision):
     return 1-2 * np.exp(-np.log(2)*precision/2)
 
-def run_phi( data, **kwargs):
+def run_phi(data, **kwargs):
+    if isinstance(data, str):
+        data = csv(data)
     data = np.array(data)
     
     # Check limits in **kwargs
@@ -234,6 +236,12 @@ def run_phi( data, **kwargs):
     else:
         return {'agreement':col_agreement['mean'],'interval': col_agreement[['hpd_2.5','hpd_97.5']].values,"computation_time":computation_time,"convergence_test":convergence}
 
+def csv(name):
+    df = pd.read_csv(name)
+    if not df.applymap(lambda x: isinstance(x, (int, float))).all(1).all(0):
+        raise ValueError('ERROR: csv is non numeric!')
+    return df
+
 def main(args=None):
     from argparse import ArgumentParser
 
@@ -246,12 +254,10 @@ def main(args=None):
                         default=False,
                         help="don't print verbose messages")
     args = parser.parse_args()
-    df = pd.read_csv(args.filename)
-    if not df.applymap(lambda x: isinstance(x, (int, float))).all(1).all(0):
-        raise ValueError('ERROR: csv is non numeric!')
+    df = csv(args.filename)
 
     as_mat =  df.values
-    result = run_phi( as_mat)
+    result = run_phi(as_mat)
     print(result)
     
 if __name__ == "__main__":
