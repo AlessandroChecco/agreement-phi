@@ -7,6 +7,7 @@ import pymc3 as pm
 import scipy.stats as stats
 from time import time
 import pandas as pd
+import ast
 
 # Agreement Phi, see https://github.com/AlessandroChecco/agreement-phi
 # Version 0.1.4
@@ -248,16 +249,21 @@ def main(args=None):
     parser = ArgumentParser(description="Phi Agreement Measure")
 
     parser.add_argument("-f", "--file", dest="filename",
-                        help="input FILE", metavar="FILE",required=True)
+                        help="input FILE <REQUIRED>", metavar="FILE",required=True)
     parser.add_argument("-v", "--verbose",
                         action="store_true", dest="verbose",
                         default=False,
-                        help="don't print verbose messages")
+                        help="print verbose messages")
+    parser.add_argument('-l','--limits', nargs=2, dest="limits",metavar="val",help='Set limits <RECOMMENDED> (two values separated by a space)',default=None)
     args = parser.parse_args()
+    if args.limits is not None:
+        limits = [ast.literal_eval(args.limits[0]), ast.literal_eval(args.limits[1])]
+    else:
+        limits = None
     df = csv(args.filename)
 
     as_mat =  df.values
-    result = run_phi(as_mat)
+    result = run_phi(as_mat,limits=limits)
     print(result)
     
 if __name__ == "__main__":

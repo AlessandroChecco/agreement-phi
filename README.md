@@ -18,7 +18,19 @@ Prepare a csv file (no header, each row is a document, each column a rater), lea
 1,1,2,
 4,3,2,1
 ``` 
-And execute from the console ``run_phi -f input.csv``.
+And execute from the console ``run_phi --file input.csv --limits 1 4``.
+More details obtained running ``run_phi --h``:
+```
+usage: agreement_phi.py [-h] -f FILE [-v] [-l val val]
+
+Phi Agreement Measure
+
+optional arguments:
+  -h, --help                     show this help message and exit
+  -f FILE, --file FILE           input FILE <REQUIRED>
+  -v, --verbose                  print verbose messages
+  -l val val, --limits val val   Set limits <RECOMMENDED> (two values separated by a space)
+```_
 
 ## Example - from python
 Input is a numpy 2-dimensional array with NaN for missing values, or equivalently a python list of lists (where each list is a set of ratings for a document, with arbitrary length). Every row represents a different document, every column a different rating. Note that Phi does not take in account rater bias, so the order in which ratings appear for each document does not matter. For this reasons, missing values and a sparse representation is needed only when documents have different number of ratings.
