@@ -6,7 +6,7 @@ python 3+, pymc3 3.3+. See requirements files for tested working versions on lin
 
 ## Installation - with pip
 Simply run ``pip install agreement_phi``.
-This will provide a module and a command line executable
+This will provide a module and a command line executable called ``run_phi``.
 
 ## Installation - without pip
 Download the folder.
