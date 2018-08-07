@@ -52,7 +52,7 @@ def run_phi(data, **kwargs):
 
     if (kwargs.get("binning") is not None) and not kwargs.get("binning"):
         print("removing binning on borders")
-        binning_multiplier = 100000
+        binning_multiplier = 2
     else:
         binning_multiplier = 1
     
