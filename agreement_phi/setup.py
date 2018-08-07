@@ -17,6 +17,7 @@ from io import open
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
+print(path.join(here, '../README.md'))
 with open(path.join(here, '../README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
@@ -43,7 +44,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.2.3',  # Required
+    version='0.2.6',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
