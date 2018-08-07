@@ -3,6 +3,7 @@ cd agreement_phi
 rm -rf ./dist
 rm -rf ./build
 rm -rf ./agreement_phi.egg-info
+rm -rf ./__pycache__
 python3 setup.py sdist bdist_wheel
 twine upload dist/*
 rm -rf ./dist
