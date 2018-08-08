@@ -58,14 +58,14 @@ run_phi(data=m_random,limits=[0,4],keep_missing=True,fast=True,njobs=4,verbose=F
 #### OPTIONAL PARAMETERS:
 
 - ``limits`` defines the scale [automatically inferred by default]. It's a list with the minimum and maximum (included) of the scale.
-- ``keep_missing`` [automatically inferred by default based on number of NaNs] boolean. If you have many NaNs you might want to switch to False,
-- ``fast`` [default True] boolean. Whether to use or not the fast inferential technique.
+- ``keep_missing`` [automatically inferred by default based on number of NaNs] boolean. If you have imbalanced documents in terms of number of ratings, you might want to switch it to False,
+- ``fast`` [default True] boolean. Whether to use or not the fast inferential technique (note that you might want to also change ``N`` in that case).
 - ``N`` [default 1000] integer. Number of iterations. Increase it if ``convergence_test`` is False.
 - ``verbose`` [default False] boolean. If True it shows more information
 - ``table`` [default False] boolean. If True more verbose output in form of a table.
 - ``njobs`` [default 1] integer. Number of parallel jobs. Set it equal to the number of CPUs available.
 
-Note that the code will try to infer the limits of the scale, but it's highly suggested to include them (in case some elements on the boundary are missing). For this example the parameter limits would be ``limits=[0,4]``.
+Note that the code will try to infer the limits of the scale, but it's highly suggested to include them (in case some elements on the boundary are missing). For the example shown above the parameter limits would be ``limits=[0,4]``.
 
 Note that ``keep_missing`` will be automatically inferred, but for highly inbalanced datasets (per document number of ratings distribution) it can be overriden by manually setting this option.
 
