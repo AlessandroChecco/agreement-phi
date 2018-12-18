@@ -85,7 +85,7 @@ Checco, A., Roitero, A., Maddalena, E., Mizzaro, S., & Demartini, G. (2017). Let
 ```
 @inproceedings{checco2017let,
   title={Let’s Agree to Disagree: Fixing Agreement Measures for Crowdsourcing},
-  author={Checco, A and Roitero, A and Maddalena, E and Mizzaro, S and Demartini, G},
+  author={Checco, Alessandro and Roitero, Kevin and Maddalena, Eddy and Mizzaro, Stefano and Demartini, Gianluca},
   booktitle={Proceedings of the Fifth AAAI Conference on Human Computation and Crowdsourcing (HCOMP-17)},
   pages={11--20},
   year={2017},
