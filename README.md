@@ -81,7 +81,7 @@ If  convergence_test is False we recommend to increase N.
 ## References
 If you use it for academic publications, please cite out paper:
 
-Checco, A., Roitero, A., Maddalena, E., Mizzaro, S., & Demartini, G. (2017). Let’s Agree to Disagree: Fixing Agreement Measures for Crowdsourcing. In Proceedings of the Fifth AAAI Conference on Human Computation and Crowdsourcing (HCOMP-17) (pp. 11-20). AAAI Press.
+Checco, A., Roitero, K., Maddalena, E., Mizzaro, S., & Demartini, G. (2017). Let’s Agree to Disagree: Fixing Agreement Measures for Crowdsourcing. In Proceedings of the Fifth AAAI Conference on Human Computation and Crowdsourcing (HCOMP-17) (pp. 11-20). AAAI Press.
 ```
 @inproceedings{checco2017let,
   title={Let’s Agree to Disagree: Fixing Agreement Measures for Crowdsourcing},
