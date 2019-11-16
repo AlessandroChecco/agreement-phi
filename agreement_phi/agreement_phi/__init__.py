@@ -126,7 +126,7 @@ def run_phi(data, **kwargs):
         if keep_missing is None:
             keep_missing=False
     
-    if (sparse and not keep_missing):
+    if (sparse and keep_missing==False):
         rectangular = False
         scaled = [doc[~np.isnan(doc)].tolist() for doc in scaled] #make data a list of lists
 
