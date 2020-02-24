@@ -132,7 +132,7 @@ cffi==1.9.1
 Bottleneck==1.2.0
 bottle==0.12.13
 boto==2.48.0
-bleach==1.5.0
+bleach==3.1.1
 bibtexparser==0.6.2
 beautifulsoup4==4.6.0
 bcrypt==3.1.4
