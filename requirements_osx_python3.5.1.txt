@@ -13,7 +13,7 @@ tornado==4.3
 Theano==1.0.1
 terminado==0.6
 termcolor==1.1.0
-tensorflow==1.6.0
+tensorflow==1.15.4
 tensorboard==1.6.0
 sympy==1.0
 stevedore==1.27.1
