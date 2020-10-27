@@ -124,7 +124,7 @@ dictset==0.3.1.2
 decorator==4.0.10
 Cython==0.25.2
 cycler==0.10.0
-cryptography==2.2.2
+cryptography==3.2
 coverage==3.7.1
 colorlover==0.2.1
 click==6.6
