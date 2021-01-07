@@ -17,7 +17,7 @@ greenlet==0.4.11
 html5lib==0.999
 httplib2==0.8
 lockfile==0.8
-lxml==3.3.3
+lxml==4.6.2
 oauthlib==0.6.1
 oneconf==0.3.7.14.04.1
 pbr==3.1.1
