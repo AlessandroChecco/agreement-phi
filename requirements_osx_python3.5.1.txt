@@ -36,7 +36,7 @@ requests==2.11.1
 redis==2.10.6
 qtconsole==4.2.1
 pyzmq==15.3.0
-PyYAML==3.11
+PyYAML==5.4
 pyvttbl==0.5.2.2
 pytz==2018.3
 pytools==2016.2.6
