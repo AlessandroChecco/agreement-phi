@@ -130,7 +130,7 @@ colorlover==0.2.1
 click==6.6
 cffi==1.9.1
 Bottleneck==1.2.0
-bottle==0.12.13
+bottle==0.12.19
 boto==2.48.0
 bleach==1.5.0
 bibtexparser==0.6.2
