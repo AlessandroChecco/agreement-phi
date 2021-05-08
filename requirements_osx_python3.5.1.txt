@@ -115,7 +115,7 @@ Flask==0.11.1
 Flask-WTF==0.9.5
 Flask-SocketIO==2.9.6
 fastdtw==0.3.0
-eventlet==0.17.4
+eventlet==0.31.0
 enum34==1.1.6
 entrypoints==0.2.2
 dtw==1.2
