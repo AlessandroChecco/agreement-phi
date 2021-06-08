@@ -63,7 +63,7 @@ protobuf==3.5.2
 prompt-toolkit==1.0.3
 ply==3.9
 pip==9.0.2
-Pillow==5.0.0
+Pillow==8.2.0
 pickleshare==0.7.2
 pexpect==4.2.0
 pbr==3.1.1
