@@ -62,7 +62,7 @@ psutil==5.0.1
 protobuf==3.5.2
 prompt-toolkit==1.0.3
 ply==3.9
-pip==9.0.2
+pip==21.1
 Pillow==5.0.0
 pickleshare==0.7.2
 pexpect==4.2.0
