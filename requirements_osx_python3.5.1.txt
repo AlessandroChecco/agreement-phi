@@ -59,7 +59,7 @@ pyasn1==0.4.2
 py==1.4.31
 ptyprocess==0.5.1
 psutil==5.0.1
-protobuf==3.5.2
+protobuf==3.15.0
 prompt-toolkit==1.0.3
 ply==3.9
 pip==9.0.2
