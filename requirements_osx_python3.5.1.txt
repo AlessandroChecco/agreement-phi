@@ -78,7 +78,7 @@ nltk==3.2.2
 networkx==1.11
 ndg-httpsclient==0.5.0
 nbformat==4.0.1
-nbconvert==4.2.0
+nbconvert==6.3.0
 mpmath==0.19
 mistune==0.7.3
 matplotlib==1.5.1
