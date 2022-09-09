@@ -80,7 +80,7 @@ ndg-httpsclient==0.5.0
 nbformat==4.0.1
 nbconvert==4.2.0
 mpmath==0.19
-mistune==0.7.3
+mistune==0.8.1
 matplotlib==1.5.1
 MarkupSafe==0.23
 Markdown==2.6.11
