@@ -95,7 +95,7 @@ jupyter-contrib-core==0.3.0
 jupyter-console==5.0.0
 jupyter-client==4.3.0
 jsonschema==2.5.1
-joblib==0.11
+joblib==1.2.0
 Jinja2==2.8
 itsdangerous==0.24
 ipywidgets==5.1.5
