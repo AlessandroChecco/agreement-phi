@@ -24,7 +24,7 @@ six==1.11.0
 simplegeneric==0.8.1
 simpleflock==0.0.3
 simhash==1.8.0
-setuptools==38.5.2
+setuptools==65.5.1
 selenium==3.8.1
 seaborn==0.7.1
 scoop==0.7.1.1
